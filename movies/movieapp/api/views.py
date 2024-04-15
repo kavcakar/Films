@@ -9,4 +9,5 @@ from movieapp.api.serializers import ContainSerializer
 def contain_list_create_api_view(request):
 
     if request.method == 'GET':
-        
+        contains = Contain.objects.filter(aktif = True)
+        serializer = ContainSerializer(contains)

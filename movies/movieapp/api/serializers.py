@@ -7,6 +7,7 @@ class ContainSerializer(serializers.Serializer):
     year = serializers.CharField()
     genre = serializers.CharField()
     director = serializers.CharField()
+    aktif = serializers.BooleanField()
     writer = serializers.CharField()
     language = serializers.CharField()
     create_time = serializers.DateTimeField(read_only=True)

@@ -43,6 +43,20 @@ def contain_detail_api_view(request, pk):
         return Response(serializer.data)
 
     elif request.method == 'PUT':
+        serializer = ContainSerializer(contain_instance, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
         
     elif request.method == 'DELETE':
-        pass
+        contain_instance.delete()
+        return Response(
+            {
+                'process':{
+                    'code': 204,
+                    'message': f'({pk}) id not found.'
+                }
+            },
+            status=status.HTTP_204_NO_CONTENT
+        )

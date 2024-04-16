@@ -18,3 +18,31 @@ def contain_list_create_api_view(request):
             serializer.save()
             return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def contain_detail_api_view(request, pk):
+    
+    try:
+       contain_instance = Contain.objects.get(pk=pk)
+    except Contain.DoesNotExist:
+        return Response(
+        {
+           'errors':{
+              'code': 404,
+              'message': f'No movie related to this id ({pk}) was found.'
+           }
+        },
+       status=status.HTTP_404_NOT_FOUND
+        
+        )
+
+    if request.method == 'GET':
+        serializer = ContainSerializer(contain_instance)
+        return Response(serializer.data)
+
+    elif request.method == 'PUT':
+        
+    elif request.method == 'DELETE':
+        pass

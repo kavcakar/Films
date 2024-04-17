@@ -5,19 +5,34 @@ from rest_framework.decorators import api_view
 from movieapp.models import Contain
 from movieapp.api.serializers import ContainSerializer
 
-@api_view(['GET', 'POST'])
-def contain_list_create_api_view(request):
+#class views
+from rest_framework.views import APIView
 
-    if request.method == 'GET':
-        contains = Contain.objects.filter(aktif = True)
+
+class ContainListCreateAPIView(APIView):
+    def get(self, request):
+        contains = Contain.objects.filter(aktif=True)
         serializer = ContainSerializer(contains, many=True)
         return Response(serializer.data)
-    elif request.method == 'POST':
+
+    def post(self, request):
         serializer = ContainSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class ContainDetailAPUView(APIView):
+
+    def get_object(self, request, pk):
+        contain_instance = get_object_or_404(Contain, pk=pk)
+        return contain_instance
+
+    def get(self, request,pk):
+        contain = self.get_object(pk=pk)
+        serializer = ContainSerializer(contain_instance)
+        return Response(serializer.data)
 
 
 
@@ -60,3 +75,20 @@ def contain_detail_api_view(request, pk):
             },
             status=status.HTTP_204_NO_CONTENT
         )
+
+               
+               
+               ### FUNCTION METHOD ###
+        # @api_view(['GET', 'POST'])
+# def contain_list_create_api_view(request):
+
+    # if request.method == 'GET':
+    #     contains = Contain.objects.filter(aktif = True)
+    #     serializer = ContainSerializer(contains, many=True)
+    #     return Response(serializer.data)
+    # elif request.method == 'POST':
+    #     serializer = ContainSerializer(data=request.data)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data, status = status.HTTP_201_CREATED)
+    #     return Response(status=status.HTTP_400_BAD_REQUEST)

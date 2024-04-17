@@ -23,7 +23,7 @@ class ContainListCreateAPIView(APIView):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-class ContainDetailAPUView(APIView):
+class ContainDetailAPIView(APIView):
 
     def get_object(self, request, pk):
         contain_instance = get_object_or_404(Contain, pk=pk)
@@ -31,50 +31,65 @@ class ContainDetailAPUView(APIView):
 
     def get(self, request,pk):
         contain = self.get_object(pk=pk)
-        serializer = ContainSerializer(contain_instance)
+        serializer = ContainSerializer(contain)
         return Response(serializer.data)
 
 
-
-@api_view(['GET', 'PUT', 'DELETE'])
-def contain_detail_api_view(request, pk):
-    
-    try:
-       contain_instance = Contain.objects.get(pk=pk)
-    except Contain.DoesNotExist:
-        return Response(
-        {
-           'errors':{
-              'code': 404,
-              'message': f'No movie related to this id ({pk}) was found.'
-           }
-        },
-       status=status.HTTP_404_NOT_FOUND
-        
-        )
-
-    if request.method == 'GET':
-        serializer = ContainSerializer(contain_instance)
-        return Response(serializer.data)
-
-    elif request.method == 'PUT':
-        serializer = ContainSerializer(contain_instance, data=request.data)
-        if serializer.is_valid():
+    def put(self, request, pk):
+        contain = self.get_object(pk=pk)
+        serializer = ContainSerializer(contain, data=request.data)
+        if  serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+
+
+    def delete(self, request, pk):
+        contain = self,get_object(pk=pk)
+        contain.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+
+# @api_view(['GET', 'PUT', 'DELETE'])
+# def contain_detail_api_view(request, pk):
+    
+#     try:
+#        contain_instance = Contain.objects.get(pk=pk)
+#     except Contain.DoesNotExist:
+#         return Response(
+#         {
+#            'errors':{
+#               'code': 404,
+#               'message': f'No movie related to this id ({pk}) was found.'
+#            }
+#         },
+#        status=status.HTTP_404_NOT_FOUND
         
-    elif request.method == 'DELETE':
-        contain_instance.delete()
-        return Response(
-            {
-                'process':{
-                    'code': 204,
-                    'message': f'({pk}) id not found.'
-                }
-            },
-            status=status.HTTP_204_NO_CONTENT
-        )
+#         )
+
+#     if request.method == 'GET':
+#         serializer = ContainSerializer(contain_instance)
+#         return Response(serializer.data)
+
+#     elif request.method == 'PUT':
+#         serializer = ContainSerializer(contain_instance, data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data)
+#         return Response(status=status.HTTP_400_BAD_REQUEST)
+        
+#     elif request.method == 'DELETE':
+#         contain_instance.delete()
+#         return Response(
+#             {
+#                 'process':{
+#                     'code': 204,
+#                     'message': f'({pk}) id not found.'
+#                 }
+#             },
+#             status=status.HTTP_204_NO_CONTENT
+#         )
 
                
                

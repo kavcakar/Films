@@ -25,7 +25,7 @@ class ContainListCreateAPIView(APIView):
 
 class ContainDetailAPIView(APIView):
 
-    def get_object(self, request, pk):
+    def get_object(self, pk):
         contain_instance = get_object_or_404(Contain, pk=pk)
         return contain_instance
 

@@ -7,6 +7,7 @@ from movieapp.api.serializers import ContainSerializer
 
 #class views
 from rest_framework.views import APIView
+from django.shortcuts import get_object_or_404
 
 
 class ContainListCreateAPIView(APIView):
@@ -45,7 +46,7 @@ class ContainDetailAPIView(APIView):
 
 
     def delete(self, request, pk):
-        contain = self,get_object(pk=pk)
+        contain = self.get_object(pk=pk)
         contain.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 

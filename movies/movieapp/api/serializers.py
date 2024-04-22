@@ -27,4 +27,10 @@ class ContainSerializer(serializers.Serializer):
         instance.language = validated_data.get('language', instance.language)
         instance.save()
         return instance
+
+
+    def validate(self, data):
+        if data ['director'] == data['writer']:
+            raise serializers.ValidationError('it can not be same writer and director')
+            return data
         

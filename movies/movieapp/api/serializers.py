@@ -31,6 +31,6 @@ class ContainSerializer(serializers.Serializer):
 
     def validate(self, data):
         if data ['director'] == data['writer']:
-            raise serializers.ValidationError('it can not be same writer and director')
-            return data
+            raise serializers.ValidationError('it can not be same writer and director.')
+        return data
         

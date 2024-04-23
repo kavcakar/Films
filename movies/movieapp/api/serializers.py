@@ -1,7 +1,19 @@
 from rest_framework import serializers
 from movieapp.models import Contain
 
-class ContainSerializer(serializers.Serializer):
+class ContainSerializer(serializers.ModelSerializer):
+    time_since_pub =serializers.SerializerMethodField()
+    class Meta:
+        model = Contain
+        fields = '__all__'
+        # fields = ['title', 'year',]
+        # exclude = ['title', 'year']
+        read_only_fields = ['id', 'create_time', 'updated_time']
+
+    def get_time_since_pub(self, object): 
+        return 'Films'
+
+class ContainDefaultSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
     title = serializers.CharField()
     year = serializers.CharField()

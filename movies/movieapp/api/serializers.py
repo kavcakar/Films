@@ -1,6 +1,10 @@
 from rest_framework import serializers
 from movieapp.models import Contain
 
+from datetime import datetime
+from django.utils import timezone
+from django.utils.timesince import timesince
+
 class ContainSerializer(serializers.ModelSerializer):
     time_since_pub =serializers.SerializerMethodField()
     class Meta:
@@ -11,7 +15,10 @@ class ContainSerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'create_time', 'updated_time']
 
     def get_time_since_pub(self, object): 
-        return 'Films'
+        now = timezone.now()
+        pub_date = timezone.localtime(object.create_time)
+        time_delta = timesince(pub_date, now)
+        return time_delta
 
 class ContainDefaultSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
